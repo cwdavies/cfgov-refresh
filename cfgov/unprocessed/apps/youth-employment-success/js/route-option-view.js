@@ -4,7 +4,7 @@ import {
   updateDailyCostAction,
   updateDaysPerWeekAction,
   updateMilesAction,
-  updateTransportationAction,
+  updateTransportationAction
 } from './reducers/route-option-reducer';
 import inputView from './input-view';
 import transitTimeView from './views/transit-time';
@@ -18,7 +18,7 @@ const CLASSES = Object.freeze( {
 const actionMap = Object.freeze( {
   miles: updateMilesAction,
   daysPerWeek: updateDaysPerWeekAction,
-  dailyCost: updateDailyCostAction,
+  dailyCost: updateDailyCostAction
 } );
 
 /**
@@ -26,32 +26,44 @@ const actionMap = Object.freeze( {
  * and the predicate functions that determine the field's state
  */
 const toggleableFields = {
-  'averageCost': ({ transportation }) => transportation && transportation !== 'Drive',
-  'miles': (state) => state.transportation === 'Drive',
-  'daysPerWeek': (state) => state.transportation === 'Drive' || state.isCostPerDay
+  averageCost: ( { transportation } ) => transportation && transportation !== 'Drive',
+  miles: state => state.transportation === 'Drive',
+  daysPerWeek: state => state.transportation === 'Drive' || state.isCostPerDay
 };
 
-function hideToggleableField(node) {
+function hideToggleableField( node ) {
+  // need to add an action to update the store somewhere
   node.value = '';
-  node.classList.add('u-hidden');
+  node.classList.add( 'u-hidden' );
 }
 
-function showToggleableField(node) {
-  node.classList.remove('u-hidden');
+function showToggleableField( node ) {
+  node.classList.remove( 'u-hidden' );
 }
 
-function updateVisibleInputs(inputs, prevState, state ) {
-  for (let name in toggleableFields) {
-    const predicate = toggleableFields[name]; 
+function updateNode( node, flag ) {
+  if ( flag ) {
+    showToggleableField( node );
+  } else {
+    hideToggleableField( node );
+  }
+}
+
+function updateVisibleInputs( inputs, prevState, state ) {
+  for ( const name in toggleableFields ) {
+    if ( !toggleableFields.hasOwnProperty( name ) ) {
+      continue;
+    }
+
+    const predicate = toggleableFields[name];
     const lastValue = prevState[name];
     const currentValue = state[name];
-    const stateHasChanged = lastValue !== currentValue || (!lastValue && !currentValue);
-
-    if (stateHasChanged) {
-      const node = inputs[name];
-      predicate(state) ? showToggleableField(node) : hideToggleableField(node)
+    const stateHasChanged = lastValue !== currentValue || ( !lastValue && !currentValue );
+    
+    if ( stateHasChanged ) {
+      updateNode( inputs[name], predicate( state ) );
     }
-  } 
+  }
 }
 
 /**
@@ -65,18 +77,24 @@ function updateVisibleInputs(inputs, prevState, state ) {
  * @returns {Object} The view's public methods
  */
 function RouteOptionFormView( element, { store, routeIndex } ) {
-  const _dom = checkDom( element, CLASSES.FORM ); 
+  const _dom = checkDom( element, CLASSES.FORM );
   const _transportationOptionEls = Array.prototype.slice.call(
     _dom.querySelectorAll( `.${ CLASSES.TRANSPORTATION_CHECKBOX }` )
   );
   const _textInputEls = Array.prototype.slice.call(
     _dom.querySelectorAll( `.${ CLASSES.QUESTION_INPUT }` )
   );
-  const _inputMap = _textInputEls.reduce((memo, node) => {
-    memo[node.querySelector('input').getAttribute('data-js-name')] = node;
+  const _inputMap = _textInputEls.reduce( ( memo, node ) => {
+    const maybeNode = node.tagName === 'INPUT' ? node : node.querySelector( 'input' );
+
+    if (!maybeNode) {
+      return memo;
+    }
+
+    memo[maybeNode.getAttribute( 'data-js-name' )] = maybeNode;
 
     return memo;
-  }, {});
+  }, {} );
 
   /**
    * Updates form state from child input text nodes
@@ -84,7 +102,7 @@ function RouteOptionFormView( element, { store, routeIndex } ) {
    */
   function _setQuestionResponse( { name, event } ) {
     const action = actionMap[name];
-    const { target: { value } } = event;
+    const { target: { value }} = event;
 
     if ( action ) {
       store.dispatch( action( {
@@ -99,7 +117,7 @@ function RouteOptionFormView( element, { store, routeIndex } ) {
    * @param {object} updateObject object with DOM event and field name
    */
   function _setSelected( { event } ) {
-    const { target: { value } } = event;
+    const { target: { value }} = event;
 
     store.dispatch( updateTransportationAction( {
       routeIndex,
@@ -129,25 +147,27 @@ function RouteOptionFormView( element, { store, routeIndex } ) {
     );
   }
 
+  const boundUpdate = updateVisibleInputs.bind( null, _inputMap );
+
   return {
     init() {
       if ( setInitFlag( _dom ) ) {
         _initRouteOptions();
         _initQuestions();
-        transitTimeView(_dom.querySelector('.m-yes-transit-time'), { store, routeIndex }).init();
+        transitTimeView( _dom.querySelector( '.m-yes-transit-time' ), { store, routeIndex } ).init();
 
-        const boundUpdate = updateVisibleInputs.bind(null, _inputMap);
-        const currentState = routeSelector(store.getState().routes, routeIndex);
+        const currentState = routeSelector(
+          store.getState().routes, routeIndex
+        );
 
-        boundUpdate(currentState, currentState);
-        
-        store.subscribe((prevState, nextState) => {
-          console.log(prevState, nextState)
+        boundUpdate( currentState, currentState );
+
+        store.subscribe( ( prevState, nextState ) => {
           boundUpdate(
-            routeSelector(prevState.routes, routeIndex),
-            routeSelector(nextState.routes, routeIndex)
-          )
-        });
+            routeSelector( prevState.routes, routeIndex ),
+            routeSelector( nextState.routes, routeIndex )
+          );
+        } );
       }
     }
   };

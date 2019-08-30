@@ -1,14 +1,14 @@
 import { checkDom, setInitFlag } from '../../../../js/modules/util/atomic-helpers';
 import inputView from '../input-view';
 import {
+  updateTimeToActionPlan,
   updateTransitTimeHoursAction,
-  updateTransitTimeMinutesAction,
-  updateTimeToActionPlan
+  updateTransitTimeMinutesAction
 } from '../reducers/route-option-reducer';
 
-const CLASSES = Object.freeze({
+const CLASSES = Object.freeze( {
   CONTAINER: 'm-yes-transit-time'
-});
+} );
 
 /**
  * TransitTimeView
@@ -20,10 +20,10 @@ const CLASSES = Object.freeze({
  * @param {object} props Additional properties to be supplied to the view
  * @returns {Object} The view's public methods
  */
-function transitTimeView(element, { store, routeIndex }) {
-  const _dom = checkDom(element, CLASSES.CONTAINER);
+function transitTimeView( element, { store, routeIndex } ) {
+  const _dom = checkDom( element, CLASSES.CONTAINER );
   const _inputs = Array.prototype.slice.call(
-    _dom.querySelectorAll('input')
+    _dom.querySelectorAll( 'input' )
   );
   const _actionMap = {
     timeToActionPlan: updateTimeToActionPlan,
@@ -42,7 +42,7 @@ function transitTimeView(element, { store, routeIndex }) {
 
     if ( method ) {
       store.dispatch( method( {
-        routeIndex, value }) );
+        routeIndex, value } ) );
     }
   }
 
@@ -50,19 +50,19 @@ function transitTimeView(element, { store, routeIndex }) {
    * Initialize the input elements this form manages
    */
   function _initInputs() {
-    _inputs.forEach(input => {
-      inputView(input, {
+    _inputs.forEach( input => {
+      inputView( input, {
         events: {
           input: _setResponse
         },
         type: input.type === 'checkbox' ? 'checkbox' : 'text'
-      }).init()
-    });
+      } ).init();
+    } );
   }
 
   return {
     init() {
-      if(setInitFlag(_dom)) {
+      if ( setInitFlag( _dom ) ) {
         _initInputs();
       }
     }

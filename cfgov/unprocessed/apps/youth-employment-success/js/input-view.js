@@ -41,10 +41,10 @@ function resolve( element, type ) {
  * @returns {Object} The view's public methods
  */
 function InputView( element, props = {} ) {
-  const finalProps = assign({}, defaultProps, props);
-  const _dom = resolve( element, finalProps.type );
+  const _finalProps = assign( {}, defaultProps, props );
+  const _dom = resolve( element, _finalProps.type );
 
-  const eventsMap = {};
+  const _eventsMap = {};
 
   if ( !_dom ) {
     throw new Error( NODE_MISSING_ERROR );
@@ -65,18 +65,20 @@ function InputView( element, props = {} ) {
 
   /**
    * Bind event handers to nodes this view manages
+   * Each event is stored in an object to facilitate unbinding when
+   * necessary
    */
   function _bindEvents() {
-    const { events = {}} = props;
+    const { events = {} } = props;
 
     Object.entries( events ).forEach( ( [ event, handler = noop ] ) => {
-      const handlerCache = eventsMap[event] || [];
+      const handlerCache = _eventsMap[event] || [];
       const delegate = eventHandler( handler );
       handlerCache.push( delegate );
 
       _dom.addEventListener( event, delegate );
 
-      eventsMap[event] = handlerCache;
+      _eventsMap[event] = handlerCache;
     } );
   }
 
@@ -84,7 +86,7 @@ function InputView( element, props = {} ) {
    * Unbind all event handlers from the input
    */
   function _unbindEvents() {
-    Object.entries( eventsMap ).forEach( ( [ event, handlers ] ) => {
+    Object.entries( _eventsMap ).forEach( ( [ event, handlers ] ) => {
       handlers.forEach( handler => _dom.removeEventListener( event, handler ) );
     } );
   }
