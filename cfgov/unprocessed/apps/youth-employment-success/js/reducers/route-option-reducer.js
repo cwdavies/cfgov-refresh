@@ -9,8 +9,10 @@ const actionTypes = Object.freeze( {
   UPDATE_TRANSPORTATION: 'UPDATE_TRANSPORTATION',
   UPDATE_MILES: 'UPDATE_MILES',
   UPDATE_DAILY_COST: 'UPDATE_DAILY_COST',
-  UPDATE_DAYS_PER_WEEK: 'UPDATE_DAYS_PER_WEEK'
-} );
+  UPDATE_DAYS_PER_WEEK: 'UPDATE_DAYS_PER_WEEK',
+  UPDATE_TRANSIT_TIME_HOURS: 'UPDATE_TRANSIT_TIME_HOURS',
+  UPDATE_TRANSIT_TIME_MINUTES: 'UPDATE_TRANSIT_TIME_MINUTES'
+};
 
 const addRouteOptionAction = actionCreator(
   actionTypes.ADD_ROUTE_OPTION
@@ -26,6 +28,12 @@ const updateDaysPerWeekAction = actionCreator(
 );
 const updateDailyCostAction = actionCreator(
   actionTypes.UPDATE_DAILY_COST
+);
+const updateTransitTimeHoursAction = actionCreator(
+  actionTypes.UPDATE_TRANSIT_TIME_HOURS
+);
+const updateTransitTimeMinutesAction = actionCreator(
+  actionTypes.UPDATE_TRANSIT_TIME_MINUTES
 );
 
 /**
@@ -108,6 +116,16 @@ function routeOptionReducer( state = initialState, action ) {
       } )
       );
     }
+    case actionTypes.UPDATE_TRANSIT_TIME_HOURS: {
+      return assign( state, {
+        transitTimeHours: data
+      });
+    }
+    case actionTypes.UPDATE_TRANSIT_TIME_MINUTES: {
+      return assign( state, {
+        transitTimeMinutes: data
+      });
+    }
     default:
       return state;
   }
@@ -120,7 +138,9 @@ export {
   updateTransportationAction,
   updateMilesAction,
   updateDaysPerWeekAction,
-  updateDailyCostAction
+  updateDailyCostAction,
+  updateTransitTimeHoursAction,
+  updateTransitTimeMinutesAction
 };
 
 export default routeOptionReducer;

@@ -1,9 +1,12 @@
 import { checkDom, setInitFlag } from '../../../js/modules/util/atomic-helpers';
 import {
+  routeSelector,
   updateDailyCostAction,
   updateDaysPerWeekAction,
   updateMilesAction,
-  updateTransportationAction
+  updateTransportationAction,
+  updateTransitTimeHoursAction,
+  updateTransitTimeMinutesAction
 } from './reducers/route-option-reducer';
 import inputView from './input-view';
 
@@ -16,8 +19,81 @@ const CLASSES = Object.freeze( {
 const actionMap = Object.freeze( {
   miles: updateMilesAction,
   daysPerWeek: updateDaysPerWeekAction,
-  dailyCost: updateDailyCostAction
+  dailyCost: updateDailyCostAction,
+  transitTimeHours: updateTransitTimeHoursAction,
+  transitTimeMinutes: updateTransitTimeMinutesAction
 } );
+
+const toggleableFields = {
+  'averageCost': ({ transportation }) => transportation && transportation !== 'Drive',
+  'miles': (state) => state.transportation === 'Drive',
+  'daysPerWeek': (state) => state.transportation === 'Drive' || state.isCostPerDay
+};
+
+function hideToggleableField(node) {
+  node.value = '';
+  node.classList.add('u-hidden');
+}
+
+function showToggleableField(node) {
+  node.classList.remove('u-hidden');
+}
+
+function updateVisibleInputs(inputs, { route: prevState }, { route: state }) {
+  console.log(arguments)
+  for (let name in toggleableFields) {
+    const predicate = toggleableFields[name]; 
+    const lastValue = prevState[name];
+    const currentValue = state[name];
+    const stateHasChanged = lastValue !== currentValue || (!lastValue && !currentValue);
+
+    if (stateHasChanged) {
+      const node = inputs[name];
+      predicate(state) ? showToggleableField(node) : hideToggleableField(node)
+    }
+  } 
+}
+
+function transitTimeView(element, { store }) {
+  const _dom = checkDom(element, 'm-yes-transit-time');
+  const _inputs = Array.prototype.slice.call(
+    _dom.querySelectorAll('input')
+  );
+  const _actionMap = {
+    transitTimeHours: updateTransitTimeHoursAction,
+    transitTimeMinutes: updateTransitTimeMinutesAction
+  };
+
+    /**
+   * Updates form state from child input text nodes
+   * @param {object} updateObject object with DOM event and field name
+   */
+  function _setResponse( { name, event } ) {
+    const method = _actionMap[name];
+
+    if ( method ) {
+      store.dispatch( method( event.target.value ) );
+    }
+  }
+
+  function _initInputs() {
+    _inputs.forEach(input => 
+      inputView(input, {
+        events: {
+          input: _setResponse
+        }
+      }).init()
+    );
+  }
+
+  return {
+    init() {
+      if(setInitFlag(_dom)) {
+        _initInputs();
+      }
+    }
+  };
+}
 
 /**
  * RouteOptionFormView
@@ -37,6 +113,11 @@ function RouteOptionFormView( element, { store, routeIndex } ) {
   const _textInputEls = Array.prototype.slice.call(
     _dom.querySelectorAll( `.${ CLASSES.QUESTION_INPUT }` )
   );
+  const _inputMap = _textInputs.reduce((memo, node) => {
+    memo[node.querySelector('input').getAttribute('data-js-name')] = node;
+
+    return memo;
+  }, {});
 
   /**
    * Updates form state from child input text nodes
@@ -94,6 +175,14 @@ function RouteOptionFormView( element, { store, routeIndex } ) {
       if ( setInitFlag( _dom ) ) {
         _initRouteOptions();
         _initQuestions();
+        transitTimeView(_dom.querySelector('.m-yes-transit-time'), { store }).init();
+
+        const boundUpdate = updateVisibleInputs.bind(null, _inputMap);
+        const currentState = store.getState();
+
+        boundUpdate(currentState, currentState);
+        
+        store.subscribe(boundUpdate);
       }
     }
   };
