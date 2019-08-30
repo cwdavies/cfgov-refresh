@@ -1,14 +1,12 @@
 import { checkDom, setInitFlag } from '../../../js/modules/util/atomic-helpers';
 import {
-  routeSelector,
   updateDailyCostAction,
   updateDaysPerWeekAction,
   updateMilesAction,
   updateTransportationAction,
-  updateTransitTimeHoursAction,
-  updateTransitTimeMinutesAction
 } from './reducers/route-option-reducer';
 import inputView from './input-view';
+import transitTimeView from './views/transit-time';
 
 const CLASSES = Object.freeze( {
   FORM: 'o-yes-route-option',
@@ -20,10 +18,12 @@ const actionMap = Object.freeze( {
   miles: updateMilesAction,
   daysPerWeek: updateDaysPerWeekAction,
   dailyCost: updateDailyCostAction,
-  transitTimeHours: updateTransitTimeHoursAction,
-  transitTimeMinutes: updateTransitTimeMinutesAction
 } );
 
+/**
+ * Map of the fields this form manages that are hidden or shown conditionally,
+ * and the predicate functions that determine the field's state
+ */
 const toggleableFields = {
   'averageCost': ({ transportation }) => transportation && transportation !== 'Drive',
   'miles': (state) => state.transportation === 'Drive',
@@ -52,47 +52,6 @@ function updateVisibleInputs(inputs, { route: prevState }, { route: state }) {
       predicate(state) ? showToggleableField(node) : hideToggleableField(node)
     }
   } 
-}
-
-function transitTimeView(element, { store }) {
-  const _dom = checkDom(element, 'm-yes-transit-time');
-  const _inputs = Array.prototype.slice.call(
-    _dom.querySelectorAll('input')
-  );
-  const _actionMap = {
-    transitTimeHours: updateTransitTimeHoursAction,
-    transitTimeMinutes: updateTransitTimeMinutesAction
-  };
-
-    /**
-   * Updates form state from child input text nodes
-   * @param {object} updateObject object with DOM event and field name
-   */
-  function _setResponse( { name, event } ) {
-    const method = _actionMap[name];
-
-    if ( method ) {
-      store.dispatch( method( event.target.value ) );
-    }
-  }
-
-  function _initInputs() {
-    _inputs.forEach(input => 
-      inputView(input, {
-        events: {
-          input: _setResponse
-        }
-      }).init()
-    );
-  }
-
-  return {
-    init() {
-      if(setInitFlag(_dom)) {
-        _initInputs();
-      }
-    }
-  };
 }
 
 /**

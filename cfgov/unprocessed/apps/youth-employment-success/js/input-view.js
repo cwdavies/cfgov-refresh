@@ -28,20 +28,6 @@ function resolve( element, type ) {
 
   return element.querySelector( `input[type="${ type }"]` );
 }
-/**
- * 
- * withOtherThing(withToggleable(inputView))
- * 
- * withToggleable(view) {
- *   
- * 
- * }
- * 
- * 
- * 
- */
-
-
 
 /**
  * InputView
