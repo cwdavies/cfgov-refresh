@@ -11,7 +11,10 @@ function createRoute( route = {} ) {
     transportation: '',
     daysPerWeek: '',
     miles: '',
-    dailyCost: ''
+    dailyCost: '',
+    transitTimeHours: '',
+    transitTimeMinutes: '',
+    timeToActionPlan: false
   }, route );
 }
 
