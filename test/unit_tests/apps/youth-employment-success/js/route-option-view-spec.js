@@ -22,15 +22,16 @@ const HTML = `
 
 describe( 'routeOptionFormView', () => {
   const CLASSES = routeOptionFormView.CLASSES;
+  const dispatch = jest.fn();
   const mockStore = () => ( {
     dispatch,
-    subscribe(fn) {
-      return fn({
-        routes: { routes: [] }
+    subscribe( fn ) {
+      return fn( {
+        routes: { routes: []}
       }, {
         routes: { routes: []
         }
-      })
+      } );
     },
     getState() {
       return {
@@ -110,15 +111,15 @@ describe( 'routeOptionFormView', () => {
     expect( mock.calls[0][0] ).toEqual( updateTransportationAction( { routeIndex: 0, value: radioEl.value } ) );
   } );
 
-  describe('conditional fields', () => {
-    it('hides conditional fields on init', () => {
-      const averageCostEl = document.querySelector('input[name="averageCost"]');
-      const milesEl = document.querySelector('input[name="miles"]');
-      const daysPerWeekEl = document.querySelector('input[name="daysPerWeek"]');
-  
-      expect(averageCostEl.classList.contains('u-hidden')).toBeTruthy();
-      expect(milesEl.classList.contains('u-hidden')).toBeTruthy();
-      expect(daysPerWeekEl.classList.contains('u-hidden')).toBeTruthy();
-    });
-  });
+  describe( 'conditional fields', () => {
+    it( 'hides conditional fields on init', () => {
+      const averageCostEl = document.querySelector( 'input[name="averageCost"]' );
+      const milesEl = document.querySelector( 'input[name="miles"]' );
+      const daysPerWeekEl = document.querySelector( 'input[name="daysPerWeek"]' );
+
+      expect( averageCostEl.classList.contains( 'u-hidden' ) ).toBeTruthy();
+      expect( milesEl.classList.contains( 'u-hidden' ) ).toBeTruthy();
+      expect( daysPerWeekEl.classList.contains( 'u-hidden' ) ).toBeTruthy();
+    } );
+  } );
 } );

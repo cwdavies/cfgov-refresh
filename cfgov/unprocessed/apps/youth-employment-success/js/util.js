@@ -119,10 +119,6 @@ function assign( output = {}, source ) {
   }, merged );
 }
 
-function resolve() {
-  
-}
-
 export {
   actionCreator,
   assign,

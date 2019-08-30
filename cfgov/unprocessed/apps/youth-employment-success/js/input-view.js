@@ -69,7 +69,7 @@ function InputView( element, props = {} ) {
    * necessary
    */
   function _bindEvents() {
-    const { events = {} } = props;
+    const { events = {}} = props;
 
     Object.entries( events ).forEach( ( [ event, handler = noop ] ) => {
       const handlerCache = _eventsMap[event] || [];

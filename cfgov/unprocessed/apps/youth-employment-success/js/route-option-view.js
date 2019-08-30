@@ -31,16 +31,29 @@ const toggleableFields = {
   daysPerWeek: state => state.transportation === 'Drive' || state.isCostPerDay
 };
 
+/**
+ * Hide an input and clear its value
+ * @param {HTMLElement} node dom element to be toggled
+ */
 function hideToggleableField( node ) {
   // need to add an action to update the store somewhere
   node.value = '';
   node.classList.add( 'u-hidden' );
 }
 
+/**
+ ** Show an input
+ * @param {HTMLElement} node dom element to be toggled
+ */
 function showToggleableField( node ) {
   node.classList.remove( 'u-hidden' );
 }
 
+/**
+ *
+ * @param {HTMLElement} node the node to be updated
+ * @param {boolean} flag indicates if node is hidden or shown
+ */
 function updateNode( node, flag ) {
   if ( flag ) {
     showToggleableField( node );
@@ -49,19 +62,34 @@ function updateNode( node, flag ) {
   }
 }
 
+/**
+ * Determine if value in store has changed since last state update
+ * @param {*} lastValue the old value of the state item
+ * @param {*} currentValue the new value of the state item
+ * @returns {boolean} Whether the value has changed
+ */
+function checkHasStateChanged( lastValue, currentValue ) {
+  return lastValue !== currentValue || ( !lastValue && !currentValue );
+}
+
+/**
+ * Updates togglebale inputs this view controls
+ * @param {object} inputs node names with ref to dom node as value
+ * @param {*} prevState previous state of the app
+ * @param {*} state current state of the app
+ */
 function updateVisibleInputs( inputs, prevState, state ) {
   for ( const name in toggleableFields ) {
-    if ( !toggleableFields.hasOwnProperty( name ) ) {
-      continue;
-    }
+    if ( toggleableFields.hasOwnProperty( name ) ) {
+      const predicate = toggleableFields[name];
+      const stateHasChanged = checkHasStateChanged(
+        prevState[name],
+        state[name]
+      );
 
-    const predicate = toggleableFields[name];
-    const lastValue = prevState[name];
-    const currentValue = state[name];
-    const stateHasChanged = lastValue !== currentValue || ( !lastValue && !currentValue );
-    
-    if ( stateHasChanged ) {
-      updateNode( inputs[name], predicate( state ) );
+      if ( stateHasChanged ) {
+        updateNode( inputs[name], predicate( state ) );
+      }
     }
   }
 }
@@ -87,7 +115,7 @@ function RouteOptionFormView( element, { store, routeIndex } ) {
   const _inputMap = _textInputEls.reduce( ( memo, node ) => {
     const maybeNode = node.tagName === 'INPUT' ? node : node.querySelector( 'input' );
 
-    if (!maybeNode) {
+    if ( !maybeNode ) {
       return memo;
     }
 
