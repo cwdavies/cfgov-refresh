@@ -8,6 +8,7 @@ import { assign } from './util';
  */
 function createRoute( route = {} ) {
   return assign( {}, {
+    averageCost: '',
     transportation: '',
     daysPerWeek: '',
     miles: '',

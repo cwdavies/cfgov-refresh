@@ -20,7 +20,7 @@ const CLASSES = Object.freeze({
  * @param {object} props Additional properties to be supplied to the view
  * @returns {Object} The view's public methods
  */
-function transitTimeView(element, { store }) {
+function transitTimeView(element, { store, routeIndex }) {
   const _dom = checkDom(element, CLASSES.CONTAINER);
   const _inputs = Array.prototype.slice.call(
     _dom.querySelectorAll('input')
@@ -41,7 +41,8 @@ function transitTimeView(element, { store }) {
     const value = type === 'checkbox' ? event.target.checked : event.target.value;
 
     if ( method ) {
-      store.dispatch( method( value ) );
+      store.dispatch( method( {
+        routeIndex, value }) );
     }
   }
 

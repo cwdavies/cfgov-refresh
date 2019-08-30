@@ -13,7 +13,7 @@ const actionTypes = Object.freeze( {
   UPDATE_TIME_TO_ACTION_PLAN: 'UPDATE_TIME_TO_ACTION_PLAN',
   UPDATE_TRANSIT_TIME_HOURS: 'UPDATE_TRANSIT_TIME_HOURS',
   UPDATE_TRANSIT_TIME_MINUTES: 'UPDATE_TRANSIT_TIME_MINUTES'
-};
+});
 
 const addRouteOptionAction = actionCreator(
   actionTypes.ADD_ROUTE_OPTION
@@ -121,19 +121,19 @@ function routeOptionReducer( state = initialState, action ) {
       );
     }
     case actionTypes.UPDATE_TIME_TO_ACTION_PLAN: {
-      return assign( state, {
-        timeToActionPlan: data
-      })
+      return assign( state, updateRouteData( state.routes, data.routeIndex, {
+        timeToActionPlan: data.value
+      }))
     }
     case actionTypes.UPDATE_TRANSIT_TIME_HOURS: {
-      return assign( state, {
-        transitTimeHours: data
-      });
+      return assign( state, updateRouteData( state.routes, data.routeIndex, {
+        transitTimeHours: data.value
+      }));
     }
     case actionTypes.UPDATE_TRANSIT_TIME_MINUTES: {
-      return assign( state, {
-        transitTimeMinutes: data
-      });
+      return assign( state, updateRouteData( state.routes, data.routeIndex, {
+        transitTimeMinutes: data.value
+      }));
     }
     default:
       return state;

@@ -1,5 +1,6 @@
 import { checkDom, setInitFlag } from '../../../js/modules/util/atomic-helpers';
 import {
+  routeSelector,
   updateDailyCostAction,
   updateDaysPerWeekAction,
   updateMilesAction,
@@ -39,8 +40,7 @@ function showToggleableField(node) {
   node.classList.remove('u-hidden');
 }
 
-function updateVisibleInputs(inputs, { route: prevState }, { route: state }) {
-  console.log(arguments)
+function updateVisibleInputs(inputs, prevState, state ) {
   for (let name in toggleableFields) {
     const predicate = toggleableFields[name]; 
     const lastValue = prevState[name];
@@ -65,14 +65,14 @@ function updateVisibleInputs(inputs, { route: prevState }, { route: state }) {
  * @returns {Object} The view's public methods
  */
 function RouteOptionFormView( element, { store, routeIndex } ) {
-  const _dom = checkDom( element, CLASSES.FORM );
+  const _dom = checkDom( element, CLASSES.FORM ); 
   const _transportationOptionEls = Array.prototype.slice.call(
     _dom.querySelectorAll( `.${ CLASSES.TRANSPORTATION_CHECKBOX }` )
   );
   const _textInputEls = Array.prototype.slice.call(
     _dom.querySelectorAll( `.${ CLASSES.QUESTION_INPUT }` )
   );
-  const _inputMap = _textInputs.reduce((memo, node) => {
+  const _inputMap = _textInputEls.reduce((memo, node) => {
     memo[node.querySelector('input').getAttribute('data-js-name')] = node;
 
     return memo;
@@ -134,14 +134,20 @@ function RouteOptionFormView( element, { store, routeIndex } ) {
       if ( setInitFlag( _dom ) ) {
         _initRouteOptions();
         _initQuestions();
-        transitTimeView(_dom.querySelector('.m-yes-transit-time'), { store }).init();
+        transitTimeView(_dom.querySelector('.m-yes-transit-time'), { store, routeIndex }).init();
 
         const boundUpdate = updateVisibleInputs.bind(null, _inputMap);
-        const currentState = store.getState();
+        const currentState = routeSelector(store.getState().routes, routeIndex);
 
         boundUpdate(currentState, currentState);
         
-        store.subscribe(boundUpdate);
+        store.subscribe((prevState, nextState) => {
+          console.log(prevState, nextState)
+          boundUpdate(
+            routeSelector(prevState.routes, routeIndex),
+            routeSelector(nextState.routes, routeIndex)
+          )
+        });
       }
     }
   };
