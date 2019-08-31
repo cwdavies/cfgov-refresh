@@ -1,5 +1,4 @@
 import { simulateEvent } from '../../../../util/simulate-event';
-import createRoute from '../../../../../cfgov/unprocessed/apps/youth-employment-success/js/route';
 import routeOptionFormView from '../../../../../cfgov/unprocessed/apps/youth-employment-success/js/route-option-view';
 import {
   updateDailyCostAction,

@@ -69,4 +69,6 @@ function transitTimeView( element, { store, routeIndex } ) {
   };
 }
 
+transitTimeView.CLASSES = CLASSES;
+
 export default transitTimeView;
