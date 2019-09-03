@@ -7,7 +7,7 @@
 
 {% block content %}
 
-<main class="content content__1-3" role="main">
+<main class="no-js content content__1-3" role="main">
   <div class="wrapper content_wrapper">
     <aside class="content_sidebar content__flush-top">
       sidebar
@@ -34,7 +34,9 @@
 {% block javascript scoped %}
     {{ super() }}
     <script async>
-      if ( document.body.parentElement.className.indexOf( 'no-js' ) === -1 ) {
+      if ('classList' in document.body) {
+        document.querySelector('main').classList.remove('no-js');
+
         !function(){
           {# Include site-wide JavaScript. #}
           var s = [
