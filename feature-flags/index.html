@@ -287,7 +287,7 @@
 <pre class="highlight"><code class="language-python">FLAGS = {
     # Beta banner, seen on beta.consumerfinance.gov
     # When enabled, a banner appears across the top of the site proclaiming
-    # &quot;This beta site is a work in progress.&quot;
+    # "This beta site is a work in progress."
     'BETA_NOTICE': [],
 }</code></pre>
 
@@ -302,15 +302,15 @@
 <p>See <a href="#enabling-a-flag">Enabling a flag</a> below for more on flag conditions.</p>
 <p>An example is <a href="https://github.com/cfpb/cfgov-refresh/blob/master/cfgov/jinja2/v1/_includes/organisms/header.html#L21-L56">the <code>BETA_NOTICE flag</code> as implemented in <code>header.html</code></a>:</p>
 <pre class="highlight"><code class="language-jinja">{% if flag_enabled('BETA_NOTICE') and show_banner %}
-&lt;div class=&quot;m-global-banner&quot;&gt;
-    &lt;div class=&quot;wrapper
+&lt;div class="m-global-banner"&gt;
+    &lt;div class="wrapper
                 wrapper__match-content
                 o-expandable
-                o-expandable__expanded&quot;&gt;
-        &lt;div class=&quot;m-global-banner_head&quot;&gt;
-            &lt;span class=&quot;cf-icon
+                o-expandable__expanded"&gt;
+        &lt;div class="m-global-banner_head"&gt;
+            &lt;span class="cf-icon
                          cf-icon-error-round
-                         m-global-banner_icon&quot;&gt;&lt;/span&gt;
+                         m-global-banner_icon"&gt;&lt;/span&gt;
             This beta site is a work in progress.
         &lt;/div&gt;
         …
@@ -328,15 +328,15 @@
 
 {% flag_enabled 'BETA_NOTICE' as beta_flag %}
 {% if beta_flag and show_banner %}
-&lt;div class=&quot;m-global-banner&quot;&gt;
-    &lt;div class=&quot;wrapper
+&lt;div class="m-global-banner"&gt;
+    &lt;div class="wrapper
                 wrapper__match-content
                 o-expandable
-                o-expandable__expanded&quot;&gt;
-        &lt;div class=&quot;m-global-banner_head&quot;&gt;
-            &lt;span class=&quot;cf-icon
+                o-expandable__expanded"&gt;
+        &lt;div class="m-global-banner_head"&gt;
+            &lt;span class="cf-icon
                          cf-icon-error-round
-                         m-global-banner_icon&quot;&gt;&lt;/span&gt;
+                         m-global-banner_icon"&gt;&lt;/span&gt;
             This beta site is a work in progress.
         &lt;/div&gt;
         …
@@ -395,7 +395,7 @@ urlpatterns += ask_patterns</code></pre>
 <pre class="highlight"><code class="language-python">FLAGS = {
     # Beta banner, seen on beta.consumerfinance.gov
     # When enabled, a banner appears across the top of the site proclaiming
-    # &quot;This beta site is a work in progress.&quot;
+    # "This beta site is a work in progress."
     'BETA_NOTICE': [
         {
             'condition': 'boolean', 

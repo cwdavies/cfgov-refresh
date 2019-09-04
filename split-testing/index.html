@@ -344,9 +344,9 @@ class AnswerPage(CFGOVPage):
 <pre class="highlight"><code class="language-python"># cfgov/ask_cfpb/tests/models/test_pages.py
 
 def test_answer_split_testing_id(self):
-    &quot;&quot;&quot;Confirm AnswerPage's split_testing_id is set to its answer_base.id,
+    """Confirm AnswerPage's split_testing_id is set to its answer_base.id,
     which is checked by the core.feature_flags.in_split_testing_cluster
-    flag condition when doing split testing on Ask CFPB answer pages.&quot;&quot;&quot;
+    flag condition when doing split testing on Ask CFPB answer pages."""
     answer = self.answer1234
     page = answer.english_page
     self.assertEqual(page.split_test_id, answer.id)</code></pre>

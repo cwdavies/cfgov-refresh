@@ -453,10 +453,10 @@ but Jinja2 is more commonly used.)
 for more details on the search algorithm used to locate a template.</p>
 <p>Returning to the <code>RelatedContent</code> example,
 this is what its Jinja2 template looks like (comments excluded):</p>
-<pre class="highlight"><code class="language-html">&lt;div class=&quot;m-related-content&quot;&gt;
+<pre class="highlight"><code class="language-html">&lt;div class="m-related-content"&gt;
     {% if value.heading %}
-        &lt;header class=&quot;m-slug-header&quot;&gt;
-            &lt;h2 class=&quot;a-heading&quot;&gt;
+        &lt;header class="m-slug-header"&gt;
+            &lt;h2 class="a-heading"&gt;
                 {{ value.heading }}
             &lt;/h2&gt;
         &lt;/header&gt;
@@ -465,10 +465,10 @@ this is what its Jinja2 template looks like (comments excluded):</p>
     {{ value.paragraph | safe }}
 
     {% if value.links %}
-        &lt;ul class=&quot;m-list m-list__links&quot;&gt;
+        &lt;ul class="m-list m-list__links"&gt;
         {% for link in value.links %}
-            &lt;li class=&quot;m-list_item&quot;&gt;
-                &lt;a href=&quot;{{ link.url }}&quot; class=&quot;m-list_link&quot;&gt;{{ link.text }}&lt;/a&gt;
+            &lt;li class="m-list_item"&gt;
+                &lt;a href="{{ link.url }}" class="m-list_link"&gt;{{ link.text }}&lt;/a&gt;
             &lt;/li&gt;
         {% endfor %}
         &lt;/ul&gt;

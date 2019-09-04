@@ -261,11 +261,11 @@
 <p>Django translations use <a href="https://en.wikipedia.org/wiki/Gettext">GNU gettext</a> (see
 <a href="../installation/#install-gnu-gettext-for-django-translation-support">the installation instructions</a>).</p>
 <p>By convention, translations are usually performed in code by wrapping a string to be translated in a function that is either named or aliased with an underscore. For example:</p>
-<pre class="highlight"><code class="language-python">_(&quot;This is a translatable string.&quot;)</code></pre>
+<pre class="highlight"><code class="language-python">_("This is a translatable string.")</code></pre>
 
 <p>These strings are collected into portable object (<code>.po</code>) files for each supported language. These files map the original string (<code>msgid</code>) to a matching translated string (<code>msgstr</code>). For example:</p>
-<pre class="highlight"><code class="language-po">msgid &quot;This is a translatable string.&quot;
-msgstr &quot;Esta es una cadena traducible.&quot;</code></pre>
+<pre class="highlight"><code class="language-po">msgid "This is a translatable string."
+msgstr "Esta es una cadena traducible."</code></pre>
 
 <p>These portable object files are compiled into machine object files (<code>.mo</code>) that the translation system uses when looking up the original string.</p>
 <p>By convention the <code>.po</code> and <code>.mo</code> files live inside a <code>locale/[LANGUAGE]/LC_MESSAGES/</code> folder structure, for example, <code>cfgov/locale/es/LC_MESSAGES/django.po</code> for the Spanish language portable object file for all of our cfgov-refresh messages.</p>
@@ -278,7 +278,7 @@ msgstr &quot;Esta es una cadena traducible.&quot;</code></pre>
 <p>In Django templates:</p>
 <pre class="highlight"><code class="language-django">{% load i18n %}
 
-{% trans &quot;Hello World!&quot; %}</code></pre>
+{% trans "Hello World!" %}</code></pre>
 
 <p>In Python code:</p>
 <pre class="highlight"><code class="language-python">from django.utils.translation import ugettext as _
@@ -294,8 +294,8 @@ django-admin.py makemessages -l es</code></pre>
 
 <h4 id="3-edit-the-portable-object-file-to-add-a-translation-for-the-string">3. Edit the portable object file to add a translation for the string<a class="headerlink" href="#3-edit-the-portable-object-file-to-add-a-translation-for-the-string" title="Permanent link">¶</a></h4>
 <p>The portable object files are stored in <code>cfgov/locale/[LANGUAGE]/LC_MESSAGES/</code>. For the Spanish portable object file, edit <code>cfgov/locale/es/LC_MESSAGES/django.po</code> and add the Spanish translation as the <code>msgstr</code> for your new <code>msgid</code></p>
-<pre class="highlight"><code class="language-po">msgid &quot;Hello World!&quot;
-msgstr &quot;Hola Mundo!&quot;</code></pre>
+<pre class="highlight"><code class="language-po">msgid "Hello World!"
+msgstr "Hola Mundo!"</code></pre>
 
 <h4 id="4-run-the-compilemessages-management-command-to-compile-the-machine-object-file">4. Run the <code>compilemessages</code> management command to compile the machine object file<a class="headerlink" href="#4-run-the-compilemessages-management-command-to-compile-the-machine-object-file" title="Permanent link">¶</a></h4>
 <pre class="highlight"><code class="language-shell">cd cfgov

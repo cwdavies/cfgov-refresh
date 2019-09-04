@@ -259,7 +259,7 @@
 <p>There are certain pages that do not live in Wagtail or are impacted by changes on another page (imagine our <a href="https://www.consumerfinance.gov/about-us/newsroom/">newsroom page</a> that lists titles of other pages) or another process (imagine data from Socrata gets updated) and thus will display outdated content until the page's time to live (TTL) has expired, a deploy has happened, or if someone manually invalidates that page. Our default TTL is 24 hours.</p>
 <h4 id="checking-the-cache-state-of-a-url">Checking the cache state of a URL<a class="headerlink" href="#checking-the-cache-state-of-a-url" title="Permanent link">¶</a></h4>
 <p>To get the current cache state of a URL (perhaps to see if that URL has been invalidated), you can use the following <code>curl</code> command to check the <code>X-Cache</code> header:</p>
-<pre class="highlight"><code class="language-shell">curl -sI -H &quot;Pragma: akamai-x-cache-on&quot; https://beta.consumerfinance.gov | grep &quot;X-Cache&quot;</code></pre>
+<pre class="highlight"><code class="language-shell">curl -sI -H "Pragma: akamai-x-cache-on" https://beta.consumerfinance.gov | grep "X-Cache"</code></pre>
 
 <p>It will return something like:</p>
 <pre class="highlight"><code>X-Cache: TCP_HIT from a23-46-239-53.deploy.akamaitechnologies.com (AkamaiGHost/9.5.4-24580776) (-)</code></pre>

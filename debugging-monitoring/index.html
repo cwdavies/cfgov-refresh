@@ -272,7 +272,7 @@ define the <code>ENABLE_SQL_LOGGING</code> environment variable:</p>
 &gt;&gt;&gt; from django.contrib.auth import get_user_model
 &gt;&gt;&gt; User = get_user_model()
 &gt;&gt;&gt; User.objects.count()
-(0.004) SELECT COUNT(*) AS &quot;__count&quot; FROM &quot;auth_user&quot;; args=()
+(0.004) SELECT COUNT(*) AS "__count" FROM "auth_user"; args=()
 97</code></pre>
 
 <p>This will log any database queries (and time taken to execute them)
