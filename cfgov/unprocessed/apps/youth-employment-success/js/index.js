@@ -16,6 +16,7 @@ const budgetForm = budgetFormView( budgetFormEl, { store } );
 budgetForm.init();
 
 const expandables = Expandable.init();
+console.log(expandables)
 const routeOptionForms = expandables.map( ( expandable, index ) => {
   store.dispatch( addRouteOptionAction( createRoute() ) );
 
